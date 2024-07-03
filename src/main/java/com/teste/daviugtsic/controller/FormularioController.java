@@ -16,6 +16,9 @@ import jakarta.servlet.http.HttpServletRequest;
 import java.util.Arrays;
 import java.util.List;
 
+/**
+ * Controlador REST para gerenciar os formulários.
+ */
 @CrossOrigin(origins = "http://localhost:3000")
 @RestController
 @RequestMapping("/formulario")
@@ -29,12 +32,26 @@ public class FormularioController {
     @Autowired
     private EmailService emailService;
 
+    // Lista de tipos MIME permitidos para o upload de arquivos
     private final List<String> allowedMimeTypes = Arrays.asList(
             "application/pdf",
             "application/msword",
             "application/vnd.openxmlformats-officedocument.wordprocessingml.document"
     );
 
+    /**
+     * Manipula o upload de arquivos e o envio do formulário.
+     *
+     * @param nome          Nome do candidato
+     * @param email         Email do candidato
+     * @param telefone      Telefone do candidato
+     * @param cargoDesejado Cargo desejado pelo candidato
+     * @param escolaridade  Escolaridade do candidato
+     * @param observacao    Observações adicionais
+     * @param arquivo       Arquivo enviado (currículo)
+     * @param request       HttpServletRequest para capturar o endereço IP do cliente
+     * @return ResponseEntity com o resultado do processamento
+     */
     @PostMapping
     public ResponseEntity<?> handleFileUpload(@RequestParam("nome") String nome,
                                               @RequestParam("email") String email,
@@ -51,6 +68,7 @@ public class FormularioController {
                     .body("Arquivo não suportado. Apenas .doc, .docx e .pdf são permitidos.");
         }
 
+        // Cria um objeto DTO para capturar os dados do formulário
         Formulario.DtoRequest dtoRequest = new Formulario.DtoRequest();
         dtoRequest.setNome(nome);
         dtoRequest.setEmail(email);
@@ -59,18 +77,18 @@ public class FormularioController {
         dtoRequest.setEscolaridade(escolaridade);
         dtoRequest.setObservacao(observacao);
 
-        // Capturar o endereço IP
+        // Capturar o endereço IP do cliente
         String clientIpAddress = request.getRemoteAddr();
 
         try {
+            // Salva o formulário e obtém a entidade salva
             Formulario formulario = formularioService.salvarFormulario(dtoRequest, arquivo, clientIpAddress);
 
             // Enviar e-mail de confirmação para o usuário
             String assuntoUsuario = "Confirmação de recebimento do formulário";
             String mensagemUsuario = "Olá " + nome + ",\n\n"
                     + "Seu formulário foi recebido com sucesso. Em breve entraremos em contato.";
-
-            emailService.enviarEmailTexto(formulario,email, assuntoUsuario, mensagemUsuario);
+            emailService.enviarEmailTexto(formulario, email, assuntoUsuario, mensagemUsuario);
 
             // Enviar e-mail com as informações do formulário e currículo para o e-mail do administrador
             String assuntoAdmin = "Novo formulário de candidatura recebido";
@@ -81,34 +99,18 @@ public class FormularioController {
                     + "Cargo Desejado: " + cargoDesejado + "\n"
                     + "Escolaridade: " + escolaridade + "\n"
                     + "Observação: " + observacao + "\n";
-
             String destinatarioAdmin = "emaildevteste60@gmail.com";
 
             // Anexar o arquivo (currículo)
             byte[] bytesArquivo = arquivo.getBytes();
             String nomeArquivo = arquivo.getOriginalFilename();
-
             emailService.enviarEmailComAnexo(destinatarioAdmin, assuntoAdmin, mensagemAdmin, bytesArquivo, nomeArquivo);
 
+            // Retorna a resposta com o formulário convertido para DTO
             return ResponseEntity.ok(Formulario.DtoResponse.convertToDto(formulario, new ModelMapper()));
         } catch (Exception e) {
+            logger.error("Erro ao enviar formulário: ", e);
             return ResponseEntity.status(500).body("Falha ao enviar o arquivo: " + e.getMessage());
-        }
-    }
-
-
-    @GetMapping
-    public ResponseEntity<?> listarTodos() {
-        return ResponseEntity.ok(formularioService.listarTodos());
-    }
-
-    @GetMapping("/{id}")
-    public ResponseEntity<?> buscarPorId(@PathVariable Long id) {
-        try {
-            Formulario formulario = formularioService.buscarPorId(id);
-            return ResponseEntity.ok(Formulario.DtoResponse.convertToDto(formulario, new ModelMapper()));
-        } catch (Exception e) {
-            return ResponseEntity.status(404).body("Formulário não encontrado: " + e.getMessage());
         }
     }
 }

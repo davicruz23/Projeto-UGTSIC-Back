@@ -14,8 +14,19 @@ import java.time.LocalDateTime;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
+/**
+ * Classe responsável por capturar e tratar exceções lançadas pelos controladores.
+ */
 @ControllerAdvice
 public class ControllerAdvisor extends ResponseEntityExceptionHandler {
+
+    /**
+     * Manipulador para exceções do tipo EntityNotFoundException.
+     *
+     * @param ex       A exceção lançada
+     * @param request  O objeto WebRequest associado à solicitação
+     * @return ResponseEntity com detalhes do erro e status HTTP 404
+     */
     @JsonIgnore
     @ExceptionHandler({EntityNotFoundException.class})
     public ResponseEntity<Object> handleEntityNotFoundException(
@@ -28,6 +39,14 @@ public class ControllerAdvisor extends ResponseEntityExceptionHandler {
 
         return new ResponseEntity<>(body, HttpStatus.NOT_FOUND);
     }
+
+    /**
+     * Manipulador para exceções do tipo ConstraintViolationException.
+     *
+     * @param ex       A exceção lançada
+     * @param request  O objeto WebRequest associado à solicitação
+     * @return ResponseEntity com detalhes do erro e status HTTP 400
+     */
     @JsonIgnore
     @ExceptionHandler({ConstraintViolationException.class})
     public ResponseEntity<Object> handleConstraintViolationException(
@@ -37,13 +56,21 @@ public class ControllerAdvisor extends ResponseEntityExceptionHandler {
         body.put("timestamp", LocalDateTime.now());
         body.put("message", "Erro ao validar a entrada");
 
-        var i = 0;
-        for (var e : ex.getConstraintViolations()){
-            body.put("erro"+i++, e.getMessage());
+        int i = 0;
+        for (var e : ex.getConstraintViolations()) {
+            body.put("erro" + i++, e.getMessage());
         }
+
         return new ResponseEntity<>(body, HttpStatus.BAD_REQUEST);
     }
 
+    /**
+     * Manipulador para exceções do tipo NullPointerException.
+     *
+     * @param ex       A exceção lançada
+     * @param request  O objeto WebRequest associado à solicitação
+     * @return ResponseEntity com detalhes do erro e status HTTP 500
+     */
     @JsonIgnore
     @ExceptionHandler({NullPointerException.class})
     public ResponseEntity<Object> handleNullPointerException(

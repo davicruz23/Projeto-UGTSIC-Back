@@ -13,6 +13,9 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.List;
 
+/**
+ * Implementação da interface de serviço para operações relacionadas ao Formulário.
+ */
 @Service
 public class FormularioServiceImpl implements FormularioService {
 
@@ -24,6 +27,14 @@ public class FormularioServiceImpl implements FormularioService {
     @Autowired
     private ModelMapper modelMapper;
 
+    /**
+     * Salva um formulário no sistema.
+     *
+     * @param dtoRequest Os dados do formulário.
+     * @param arquivo O arquivo anexado ao formulário.
+     * @param ipAddress O endereço IP do remetente do formulário.
+     * @return O formulário salvo.
+     */
     @Override
     public Formulario salvarFormulario(Formulario.DtoRequest dtoRequest, MultipartFile arquivo, String ipAddress) {
         if (arquivo.isEmpty()) {
@@ -45,8 +56,8 @@ public class FormularioServiceImpl implements FormularioService {
             // Converte o DTO para a entidade
             Formulario formulario = Formulario.DtoRequest.convertToEntity(dtoRequest, modelMapper);
             formulario.setArquivo(arquivo.getOriginalFilename());
-
             formulario.setIpAddress(ipAddress);
+
             // Salva a entidade no banco de dados
             return formularioRepository.save(formulario);
         } catch (IOException e) {
@@ -55,11 +66,22 @@ public class FormularioServiceImpl implements FormularioService {
         }
     }
 
+    /**
+     * Lista todos os formulários salvos.
+     *
+     * @return Uma lista de todos os formulários.
+     */
     @Override
     public List<Formulario> listarTodos() {
         return formularioRepository.findAll();
     }
 
+    /**
+     * Busca um formulário pelo seu ID.
+     *
+     * @param id O ID do formulário a ser buscado.
+     * @return O formulário encontrado.
+     */
     @Override
     public Formulario buscarPorId(Long id) {
         return formularioRepository.findById(id).orElseThrow(() -> new RuntimeException("Formulário não encontrado"));
