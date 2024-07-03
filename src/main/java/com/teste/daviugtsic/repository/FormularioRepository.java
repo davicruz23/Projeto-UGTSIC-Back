@@ -10,5 +10,7 @@ import org.springframework.stereotype.Repository;
  */
 @Repository
 public interface FormularioRepository extends JpaRepository<Formulario, Long> {
-    // Métodos adicionais de consulta podem ser definidos aqui, se necessário.
+
+    boolean existsByEmail(String email);
+
 }

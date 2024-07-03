@@ -68,6 +68,12 @@ public class FormularioController {
                     .body("Arquivo não suportado. Apenas .doc, .docx e .pdf são permitidos.");
         }
 
+        // Verifica se o email ou telefone já existem
+        if (formularioService.existeEmail(email)) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                    .body("Email em uso.");
+        }
+
         // Cria um objeto DTO para capturar os dados do formulário
         Formulario.DtoRequest dtoRequest = new Formulario.DtoRequest();
         dtoRequest.setNome(nome);

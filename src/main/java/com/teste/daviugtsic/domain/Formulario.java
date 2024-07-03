@@ -35,9 +35,8 @@ public class Formulario extends AbstractEntity {
 
     /**
      * O número de telefone da pessoa que está submetendo o formulário.
-     * Deve ser único e seguir o padrão (00)00000-0000.
+     * Deve seguir o padrão (00)00000-0000.
      */
-    @Column(unique = true)
     @Pattern(regexp = "\\(\\d{2}\\)\\d{5}-\\d{4}", message = "Telefone deve estar no formato (00)00000-0000")
     private String telefone;
 

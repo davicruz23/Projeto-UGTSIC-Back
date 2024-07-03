@@ -31,26 +31,26 @@ public abstract class AbstractEntity {
      */
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    Long id;
+    private Long id;
 
     /**
      * Data e hora em que a entidade foi excluída.
      */
-    LocalDateTime deletedAt;
+    private LocalDateTime deletedAt;
 
     /**
      * Data e hora em que a entidade foi criada.
      * Preenchido automaticamente quando a entidade é salva pela primeira vez.
      */
     @CreationTimestamp
-    LocalDateTime createdAt;
+    private LocalDateTime createdAt;
 
     /**
      * Data e hora em que a entidade foi atualizada pela última vez.
      * Preenchido automaticamente a cada atualização da entidade.
      */
     @UpdateTimestamp
-    LocalDateTime updateAt;
+    private LocalDateTime updateAt;
 
     /**
      * Endereço IP do usuário ou sistema que criou/atualizou a entidade.
