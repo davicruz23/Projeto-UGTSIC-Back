@@ -105,6 +105,8 @@ public class FormularioController {
                     + "Cargo Desejado: " + cargoDesejado + "\n"
                     + "Escolaridade: " + escolaridade + "\n"
                     + "Observação: " + observacao + "\n";
+
+            //Configure o email do administrador que deve receber o formulario.
             String destinatarioAdmin = "emaildevteste60@gmail.com";
 
             // Anexar o arquivo (currículo)
