@@ -13,7 +13,10 @@
 ## Email
 1. Deixei um email configurado apenas para testes em `application.properties` altere o email que consta colocando o de sua preferência
 2. No FormularioController na linha 110 é preciso colocar o email que colocou no `application.properties`
-3. Em `src/main/java/DaviugtsicApplication` também e preciso alterar o email que foi colocado nos anteriores
+3. Em `src/main/java/DaviugtsicApplication` também e preciso alterar o email que foi colocado em `application.properties`
+4. será enviado um email para o administrador que no caso é teste@teste.com (como o email é fake e não possue a senha o envio do formulario vai falhar!)
+5. estou deixando comentado no código um email e senha criado no google apps que usei e vai funcionar e retornar status 200. lembrando que se por um email válido no formulário
+   você receberá a confirmação do envio e resebimento do formulário
 
 ## Estrutura do Projeto
 - `src/main/java/DaviugtsicApplication`: para executar a aplicação
