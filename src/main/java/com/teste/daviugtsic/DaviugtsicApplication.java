@@ -36,25 +36,4 @@ public class DaviugtsicApplication {
 	public ModelMapper modelMapper() {
 		return new ModelMapper();
 	}
-
-	/**
-	 * Configuração para o JavaMailSender, utilizado para envio de e-mails.
-	 *
-	 * @return Instância de JavaMailSender configurada com as propriedades necessárias
-	 */
-	@Bean
-	public JavaMailSender javaMailSender() {
-		JavaMailSenderImpl mailSender = new JavaMailSenderImpl();
-		mailSender.setHost("smtp.gmail.com"); // Configura o host do servidor SMTP
-		mailSender.setPort(587); // Configura a porta do servidor SMTP
-		mailSender.setUsername("teste@teste.com"); // Configura o nome de usuário do e-mail
-		//mailSender.setPassword("cnng bvrw wbdu vkev"); // Configura a senha do e-mail
-
-		// Configurações adicionais para o envio de e-mails
-		Properties props = mailSender.getJavaMailProperties();
-		props.put("mail.smtp.auth", "true"); // Habilita a autenticação SMTP
-		props.put("mail.smtp.starttls.enable", "true"); // Habilita o STARTTLS para segurança na comunicação
-
-		return mailSender;
-	}
 }
