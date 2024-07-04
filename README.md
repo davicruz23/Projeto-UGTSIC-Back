@@ -16,7 +16,7 @@
 3. será enviado um email para o administrador que no caso é teste@teste.com (como o email é fake e não possue senha o envio do formulario vai falhar!)
 4. estou deixando comentado no código um email e senha criado no google apps que usei e vai funcionar e retornar status 200. lembrando que se por um email válido no formulário
    você receberá a confirmação do envio e recebimento do formulário
-   A senha é obrigatória para a maioria dos servidores SMTP. "SE QUIZER REALMENTE UTILIZAR O SERVIÇO RECOMENDO CONFIGURAR UMA SENHA APP NO GERENCIAMENT DE CONSTAS DO GOOGLE PARA GMAIL"
+   A senha é obrigatória para a maioria dos servidores SMTP. "Se realmente desejar usar o serviço de email, é preciso configurar uma senha no google app"
 
 ## Estrutura do Projeto
 - `src/main/java/DaviugtsicApplication`: para executar a aplicação
