@@ -47,8 +47,8 @@ public class DaviugtsicApplication {
 		JavaMailSenderImpl mailSender = new JavaMailSenderImpl();
 		mailSender.setHost("smtp.gmail.com"); // Configura o host do servidor SMTP
 		mailSender.setPort(587); // Configura a porta do servidor SMTP
-		mailSender.setUsername("emaildevteste60@gmail.com"); // Configura o nome de usuário do e-mail
-		mailSender.setPassword("cnng bvrw wbdu vkev"); // Configura a senha do e-mail
+		mailSender.setUsername("teste@teste.com"); // Configura o nome de usuário do e-mail
+		//mailSender.setPassword("cnng bvrw wbdu vkev"); // Configura a senha do e-mail
 
 		// Configurações adicionais para o envio de e-mails
 		Properties props = mailSender.getJavaMailProperties();

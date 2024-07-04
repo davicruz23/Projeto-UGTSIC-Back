@@ -107,7 +107,7 @@ public class FormularioController {
                     + "Observação: " + observacao + "\n";
 
             //Configure o email do administrador que deve receber o formulario.
-            String destinatarioAdmin = "emaildevteste60@gmail.com";
+            String destinatarioAdmin = "teste@teste.com";
 
             // Anexar o arquivo (currículo)
             byte[] bytesArquivo = arquivo.getBytes();
