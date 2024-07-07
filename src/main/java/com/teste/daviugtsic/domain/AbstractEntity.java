@@ -36,6 +36,7 @@ public abstract class AbstractEntity {
     /**
      * Data e hora em que a entidade foi excluída.
      */
+    @JsonIgnore
     private LocalDateTime deletedAt;
 
     /**
@@ -49,6 +50,7 @@ public abstract class AbstractEntity {
      * Data e hora em que a entidade foi atualizada pela última vez.
      * Preenchido automaticamente a cada atualização da entidade.
      */
+    @JsonIgnore
     @UpdateTimestamp
     private LocalDateTime updateAt;
 

@@ -1,8 +1,11 @@
 package com.teste.daviugtsic.service;
 
 import com.teste.daviugtsic.domain.Formulario;
+import org.springframework.core.io.Resource;
 import org.springframework.web.multipart.MultipartFile;
 
+import jakarta.servlet.http.HttpServletResponse;
+import java.io.IOException;
 import java.util.List;
 
 /**
@@ -42,4 +45,8 @@ public interface FormularioService {
      * @return O formulário encontrado.
      */
     Formulario buscarPorId(Long id);
+
+    String buscarNomeArquivoPorId(Long id);
+
+
 }

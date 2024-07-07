@@ -9,6 +9,9 @@ import org.modelmapper.ModelMapper;
 import lombok.*;
 import org.springframework.hateoas.RepresentationModel;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 /**
  * Classe que representa uma entidade de formulário.
  */
@@ -136,6 +139,7 @@ public class Formulario extends AbstractEntity {
     @Data
     public static class DtoResponse extends RepresentationModel<DtoResponse> {
 
+        private Long id;
         /**
          * O nome da pessoa que está submetendo o formulário.
          */
@@ -180,6 +184,11 @@ public class Formulario extends AbstractEntity {
          */
         public static DtoResponse convertToDto(Formulario f, ModelMapper mapper) {
             return mapper.map(f, DtoResponse.class);
+        }
+        public static List<DtoResponse> convertToDtoList(List<Formulario> formularios, ModelMapper modelMapper) {
+            return formularios.stream()
+                    .map(formulario -> convertToDto(formulario, modelMapper))
+                    .collect(Collectors.toList());
         }
     }
 }

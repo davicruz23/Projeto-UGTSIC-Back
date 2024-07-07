@@ -3,6 +3,7 @@ package com.teste.daviugtsic.service;
 import com.teste.daviugtsic.domain.Formulario;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
@@ -19,6 +20,9 @@ import java.util.List;
  */
 @Service
 public class FormularioServiceImpl implements FormularioService {
+
+    @Value("${app.upload-dir}")
+    private String uploadDirectory;
 
     private static final String UPLOADED_FOLDER = "uploads/";
 
@@ -103,5 +107,14 @@ public class FormularioServiceImpl implements FormularioService {
     @Override
     public Formulario buscarPorId(Long id) {
         return formularioRepository.findById(id).orElseThrow(() -> new RuntimeException("Formulário não encontrado"));
+    }
+    @Override
+    public String buscarNomeArquivoPorId(Long id) {
+        Formulario formulario = formularioRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Formulário não encontrado"));
+
+        String nomeArquivo = formulario.getArquivo(); // Assumindo que o nome do arquivo está armazenado no campo 'arquivo'
+        System.out.println("Nome do arquivo encontrado para o ID " + id + ": " + nomeArquivo);
+        return nomeArquivo;
     }
 }

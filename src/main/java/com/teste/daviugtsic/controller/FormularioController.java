@@ -1,5 +1,6 @@
 package com.teste.daviugtsic.controller;
-
+import org.springframework.core.io.Resource;
+import org.springframework.core.io.UrlResource;
 import com.teste.daviugtsic.domain.Formulario;
 import com.teste.daviugtsic.service.EmailService;
 import com.teste.daviugtsic.service.FormularioService;
@@ -7,14 +8,25 @@ import org.modelmapper.ModelMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
+import org.springframework.http.*;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
-
 import jakarta.servlet.http.HttpServletRequest;
+
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.net.MalformedURLException;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.nio.file.Paths;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
+
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RestController;
 
 /**
  * Controlador REST para gerenciar os formulários.
@@ -52,7 +64,7 @@ public class FormularioController {
      * @param request       HttpServletRequest para capturar o endereço IP do cliente
      * @return ResponseEntity com o resultado do processamento
      */
-    @PostMapping
+    @PostMapping("/enviar")
     public ResponseEntity<?> handleFileUpload(@RequestParam("nome") String nome,
                                               @RequestParam("email") String email,
                                               @RequestParam("telefone") String telefone,
@@ -121,4 +133,56 @@ public class FormularioController {
             return ResponseEntity.status(500).body("Falha ao enviar o arquivo: " + e.getMessage());
         }
     }
+
+    @GetMapping("/list")
+    public ResponseEntity<List<Formulario.DtoResponse>> listarFormularios() {
+        List<Formulario> formularios = formularioService.listarTodos();
+        List<Formulario.DtoResponse> dtos = Formulario.DtoResponse.convertToDtoList(formularios, new ModelMapper());
+        return ResponseEntity.ok(dtos);
+    }
+
+    /**
+     * Retorna um formulário pelo ID.
+     *
+     * @param id ID do formulário a ser retornado
+     * @return ResponseEntity com o formulário encontrado
+     */
+    @GetMapping("/{id}")
+    public ResponseEntity<Formulario.DtoResponse> getFormularioById(@PathVariable Long id) {
+        try {
+            Formulario formulario = formularioService.buscarPorId(id);
+            if (formulario != null) {
+                Formulario.DtoResponse dto = Formulario.DtoResponse.convertToDto(formulario, new ModelMapper());
+                return ResponseEntity.ok(dto);
+            } else {
+                return ResponseEntity.notFound().build();
+            }
+        } catch (Exception e) {
+            logger.error("Erro ao buscar formulário por ID: " + id, e);
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+        }
+    }
+    @GetMapping("/{id}/download")
+    public ResponseEntity<Resource> downloadArquivoPorId(@PathVariable Long id) throws FileNotFoundException, MalformedURLException {
+        String nomeArquivo = formularioService.buscarNomeArquivoPorId(id);
+
+        // Construa o caminho completo para o arquivo dentro do diretório 'uploads'
+        String uploadsPath = Paths.get(System.getProperty("user.dir"), "uploads").toString();
+        String filePath = Paths.get(uploadsPath, nomeArquivo).toString();
+
+        // Carregar o arquivo como recurso
+        Resource resource = new UrlResource(Paths.get(filePath).toUri());
+
+        if (!resource.exists()) {
+            throw new FileNotFoundException("Arquivo não encontrado: " + nomeArquivo);
+        }
+
+        // Configurar o cabeçalho de resposta para o navegador entender que é um arquivo para download
+        return ResponseEntity.ok()
+                .contentType(MediaType.APPLICATION_PDF)
+                .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + resource.getFilename() + "\"")
+                .body(resource);
+    }
+
 }
+
