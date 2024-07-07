@@ -38,7 +38,7 @@
 - `src/main/resources`: Arquivos de configuração
 
 ## Endpoints da API
-- `POST /formulario`: Cria um novo formulario
+- `POST /formulario/enviar`: Cria um novo formulario
 - `POST/auth/login`: Uusuario admin colocado localmente nas configurações
 - `GET//formularios/list`: apenas o admin pode ter acesso após autenticação (usuario:admin/senha:admin)
 
