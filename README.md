@@ -9,6 +9,16 @@
 2. Configure o banco de dados PostgreSQL:
    - Crie um banco de dados chamado `formulariobd` pode alterar se preferir
    - Configure as propiedades de conexão em `application.properties`
+
+## Funcionalidades
+- Enviar Formulario com os campos nome,email,telefone,Cargo desejado,Observação e um arquivo nos formatos .doc,.docx,pdf
+- Listar os formularios recebidos apenas para o admin
+
+## Segurança
+- Foi adicionado autenticação do spring security auth utilizando token jwt
+
+##Teste Unitário
+- Foi implementado um teste no back na classe formulario, ele se localiza em `main/java/test/formularioTest`
   
 ## Email
 1. Deixei teste@teste.com como padrão como solicitado em `application.properties` pode alterar o email que consta colocando o de sua preferência
@@ -24,6 +34,8 @@
 
 ## Endpoints da API
 - `POST /formulario`: Cria um novo formulario
+- `POST/auth/login`: Uusuario admin colocado localmente nas configurações
+- `GET//formularios/list`: apenas o admin pode ter acesso após autenticação (usuario:admin/senha:admin)
 
 ## Contribuições
 Contribuições são bem-vindas!
