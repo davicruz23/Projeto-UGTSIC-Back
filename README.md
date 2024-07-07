@@ -14,6 +14,11 @@
 - Enviar Formulario com os campos nome,email,telefone,Cargo desejado,Observação e um arquivo nos formatos .doc,.docx,pdf
 - Listar os formularios recebidos apenas para o admin
 
+## Banco de dados
+- Foi ultilizado o banco de dados PostgreSQL para persistência de dados. e preciso configurar para utiliza-lo
+- Deixarei o `spring.jpa.hibernate.ddl-auto=create-drop` para sempre que iniciar criar as tabelas e ao fim da execução
+  excluir os dados do banco. se preferir pode deixar em update.
+
 ## Segurança
 - Foi adicionado autenticação do spring security auth utilizando token jwt
 
